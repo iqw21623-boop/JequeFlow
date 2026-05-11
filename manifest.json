@@ -1,0 +1,9 @@
+{
+  "name": "JegueFlow",
+  "short_name": "JegueFlow",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3f1eb",
+  "theme_color": "#222222",
+  "orientation": "portrait"
+}

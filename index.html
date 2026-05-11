@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JegueFlow</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f3f1eb;
+padding:40px;
+color:#222;
+}
+.container{
+max-width:900px;
+margin:auto;
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+.line{
+height:28px;
+border-bottom:1px solid rgba(0,0,0,0.1);
+margin-bottom:18px;
+}
+button{
+padding:12px 18px;
+border:none;
+border-radius:999px;
+background:#222;
+color:white;
+cursor:pointer;
+}
+.dark{
+background:#12161c;
+color:white;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>JegueFlow</h1>
+<p>Caderno inteligente premium para escrita criativa.</p>
+
+<button onclick="toggleTheme()">Alternar Tema</button>
+
+<div style="margin-top:40px;">
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+</div>
+</div>
+
+<script>
+function toggleTheme(){
+document.body.classList.toggle('dark');
+}
+
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('service-worker.js');
+});
+}
+</script>
+
+</body>
+</html>
