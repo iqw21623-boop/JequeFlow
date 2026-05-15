@@ -1,460 +1,77 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JegueFlow</title>
-<link rel="manifest" href="manifest.json">
-
+<title>JegueFlow Ultimate</title>
 <style>
-*{box-sizing:border-box;}
-
 body{
-margin:0;
 font-family:Arial,sans-serif;
 background:#f3f1eb;
-color:#222;
-transition:0.3s;
-}
-
-.dark{
-background:#12161c;
-color:white;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 24px;
-position:sticky;
-top:0;
-background:rgba(255,255,255,0.7);
-backdrop-filter:blur(10px);
-z-index:100;
-}
-
-.dark .topbar{
-background:rgba(20,20,20,0.7);
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-}
-
-.search-box{
-width:45%;
-}
-
-.search-box input{
-width:100%;
-padding:12px 18px;
-border:none;
-border-radius:999px;
-font-size:16px;
-outline:none;
-}
-
-.gear{
-font-size:28px;
-cursor:pointer;
-}
-
-.sidebar{
-position:fixed;
-top:0;
-right:-320px;
-width:320px;
-height:100%;
-background:white;
-padding:25px;
-transition:0.3s;
-overflow-y:auto;
-box-shadow:-10px 0 30px rgba(0,0,0,0.1);
-z-index:200;
-}
-
-.dark .sidebar{
-background:#1e242d;
-}
-
-.sidebar.open{
-right:0;
-}
-
-.sidebar button{
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border:none;
-border-radius:14px;
-cursor:pointer;
-font-size:15px;
-}
-
-.workspace{
-max-width:950px;
-margin:auto;
 padding:30px;
 }
-
-.block{
-background:white;
-padding:20px;
-border-radius:20px;
-margin-bottom:18px;
-box-shadow:0 8px 25px rgba(0,0,0,0.05);
-}
-
-.dark .block{
-background:#1e242d;
-}
-
 textarea{
 width:100%;
-min-height:150px;
-border:none;
-outline:none;
-resize:vertical;
+height:400px;
 font-size:18px;
-line-height:2;
-background:transparent;
-color:inherit;
-font-family:inherit;
-
-background-image:
-linear-gradient(to bottom,
-transparent 95%,
-rgba(0,0,0,0.08) 95%);
-
-background-size:100% 36px;
+line-height:1.8;
 }
-
-.code-block{
-background:#0d1117;
+.code{
+background:#111;
 color:#58a6ff;
-font-family:monospace;
 padding:16px;
-border-radius:14px;
-overflow:auto;
-white-space:pre-wrap;
-min-height:120px;
-outline:none;
-}
-
-.check-item{
-display:flex;
-gap:10px;
-margin-bottom:10px;
-}
-
-.check-item input[type="text"]{
-flex:1;
-padding:10px;
-border:none;
-border-radius:10px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-td{
-border:1px solid rgba(0,0,0,0.15);
-padding:12px;
-min-width:120px;
-}
-
-canvas{
-width:100%;
-height:250px;
 border-radius:12px;
-background:white;
-border:1px solid rgba(0,0,0,0.1);
+font-family:monospace;
+margin-top:20px;
+white-space:pre-wrap;
+}
+.ai{
+position:fixed;
+bottom:20px;
+right:20px;
+padding:16px;
+border:none;
+border-radius:999px;
+cursor:pointer;
 }
 </style>
 </head>
-
 <body>
 
-<div class="topbar">
-<div class="logo">🐴 JegueFlow</div>
+<h1>🐴 JegueFlow Ultimate</h1>
 
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="Pesquisar palavra ou código...">
+<textarea placeholder="Escreva suas anotações aqui..."></textarea>
+
+<div class="code" contenteditable="true">
+// Seu código aqui
+function estudar(){
+   console.log("JegueFlow");
+}
 </div>
 
-<div class="gear" onclick="toggleSidebar()">⚙️</div>
-</div>
-
-<div class="sidebar" id="sidebar">
-<h2>Adicionar Bloco</h2>
-
-<button onclick="addTextBlock()">✏️ Texto</button>
-<button onclick="addCodeBlock()">💻 Código</button>
-<button onclick="addChecklist()">☑️ Checklist</button>
-<button onclick="addTable()">📊 Tabela</button>
-<button onclick="addDrawing()">🎨 Desenho</button>
-<button onclick="toggleTheme()">🌙 Tema</button>
-</div>
-
-<div class="workspace" id="workspace"></div>
+<button class="ai" onclick="copiarMarkdown()">
+💬 IA
+</button>
 
 <script>
 
-const workspace = document.getElementById('workspace');
+function copiarMarkdown(){
 
-function toggleSidebar(){
-document.getElementById('sidebar').classList.toggle('open');
-}
+const texto = document.querySelector("textarea").value;
+const codigo = document.querySelector(".code").innerText;
 
-function toggleTheme(){
-document.body.classList.toggle('dark');
-saveData();
-}
+const markdown =
+texto +
+"\n\n```javascript\n" +
+codigo +
+"\n```";
 
-function addTextBlock(content=''){
-const div = document.createElement('div');
-div.className = 'block';
+navigator.clipboard.writeText(markdown);
 
-const textarea = document.createElement('textarea');
-textarea.placeholder = 'Escreva livremente...';
-textarea.value = content;
-textarea.oninput = saveData;
-
-div.appendChild(textarea);
-workspace.appendChild(div);
-
-saveData();
-}
-
-function addCodeBlock(code='// Seu código aqui'){
-const div = document.createElement('div');
-div.className = 'block';
-
-const codeBlock = document.createElement('div');
-codeBlock.className = 'code-block';
-codeBlock.contentEditable = true;
-codeBlock.innerText = code;
-
-codeBlock.addEventListener('input', saveData);
-
-codeBlock.addEventListener('keydown', function(e){
-if(e.key === 'Tab'){
-e.preventDefault();
-document.execCommand('insertText', false, '   ');
-}
-});
-
-const copyBtn = document.createElement('button');
-copyBtn.innerText = '📋 Copiar Código';
-
-copyBtn.onclick = () => {
-navigator.clipboard.writeText(codeBlock.innerText);
-};
-
-div.appendChild(copyBtn);
-div.appendChild(document.createElement('br'));
-div.appendChild(document.createElement('br'));
-div.appendChild(codeBlock);
-
-workspace.appendChild(div);
-
-saveData();
-}
-
-function addChecklist(items=['']){
-const div = document.createElement('div');
-div.className = 'block';
-
-items.forEach(text => {
-
-const item = document.createElement('div');
-item.className = 'check-item';
-
-item.innerHTML = `
-<input type="checkbox">
-<input type="text" placeholder="Checklist..." value="${text}">
-`;
-
-item.querySelector('input[type="text"]').oninput = saveData;
-
-div.appendChild(item);
-
-});
-
-workspace.appendChild(div);
-
-saveData();
-}
-
-function addTable(){
-const div = document.createElement('div');
-div.className = 'block';
-
-const table = document.createElement('table');
-
-for(let i=0;i<3;i++){
-
-const row = document.createElement('tr');
-
-for(let j=0;j<3;j++){
-
-const cell = document.createElement('td');
-cell.contentEditable = true;
-cell.oninput = saveData;
-
-row.appendChild(cell);
+alert("📋 Conteúdo copiado para enviar à IA!");
 
 }
-
-table.appendChild(row);
-
-}
-
-div.appendChild(table);
-
-workspace.appendChild(div);
-
-saveData();
-}
-
-function addDrawing(){
-
-const div = document.createElement('div');
-div.className = 'block';
-
-const canvas = document.createElement('canvas');
-
-canvas.width = 800;
-canvas.height = 250;
-
-const ctx = canvas.getContext('2d');
-
-let drawing = false;
-
-canvas.addEventListener('mousedown', ()=> drawing = true);
-canvas.addEventListener('mouseup', ()=> {
-drawing = false;
-ctx.beginPath();
-});
-
-canvas.addEventListener('mousemove', draw);
-
-function draw(e){
-
-if(!drawing) return;
-
-ctx.lineWidth = 2;
-ctx.lineCap = 'round';
-
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-
-}
-
-div.appendChild(canvas);
-
-workspace.appendChild(div);
-
-}
-
-function saveData(){
-localStorage.setItem('jegueflow-data', workspace.innerHTML);
-localStorage.setItem('jegueflow-theme', document.body.className);
-}
-
-function loadData(){
-
-const saved = localStorage.getItem('jegueflow-data');
-
-if(saved){
-workspace.innerHTML = saved;
-reattachEvents();
-}else{
-addTextBlock();
-}
-
-const theme = localStorage.getItem('jegueflow-theme');
-
-if(theme){
-document.body.className = theme;
-}
-
-}
-
-function reattachEvents(){
-
-document.querySelectorAll('textarea').forEach(el=>{
-el.oninput = saveData;
-});
-
-document.querySelectorAll('td').forEach(el=>{
-el.oninput = saveData;
-});
-
-document.querySelectorAll('.code-block').forEach(el=>{
-
-el.addEventListener('input', saveData);
-
-el.addEventListener('keydown', function(e){
-if(e.key === 'Tab'){
-e.preventDefault();
-document.execCommand('insertText', false, '   ');
-}
-});
-
-});
-
-}
-
-function searchWord(){
-
-const query = document.getElementById('searchInput').value.toLowerCase();
-
-if(!query) return;
-
-const blocks = document.querySelectorAll('textarea, td, .code-block, input[type="text"]');
-
-for(let block of blocks){
-
-const text = block.value || block.innerText;
-
-if(text.toLowerCase().includes(query)){
-
-block.scrollIntoView({
-behavior:'smooth',
-block:'center'
-});
-
-block.style.background = '#fff5a8';
-
-setTimeout(()=>{
-block.style.background = '';
-},2000);
-
-break;
-
-}
-
-}
-
-}
-
-document.getElementById('searchInput').addEventListener('keydown', e => {
-
-if(e.key === 'Enter'){
-searchWord();
-}
-
-});
-
-loadData();
 
 </script>
 

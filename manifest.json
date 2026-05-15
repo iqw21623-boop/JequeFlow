@@ -1,8 +1,6 @@
+
 {
-"name":"JegueFlow",
+"name":"JegueFlow Ultimate",
 "short_name":"JegueFlow",
-"display":"standalone",
-"background_color":"#12161c",
-"theme_color":"#12161c",
-"start_url":"./"
+"display":"standalone"
 }
